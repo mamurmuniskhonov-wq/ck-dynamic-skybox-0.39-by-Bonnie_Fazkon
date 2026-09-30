@@ -14,6 +14,8 @@ Only the Lua controller is in this repository. The presets, HDR cubemaps and tex
 
 **Height fog.** The preset fog height and density are applied as they are. Squeezing the fog into a thin layer near the ground made the lit 0.39 fog glow white.
 
+**Sky brightness and sun flare.** The presets were made for 0.38 with a sky brightness of 280, while stock 0.39 levels use 40. It is scaled down by 40/280, and the lens flare is set to scale 1 instead of the level's 5, so looking towards the sun no longer turns the sky and the car white. Both are restored when the mod is turned off.
+
 **Sun colour.** 0.39 ignores the `sunScale` gradients. The colour difference between a preset and plain daylight is reproduced through extra ozone absorption along the sun ray.
 
 **Freeze time.** Every preset is locked to the time of day its cubemap was made for. A *Freeze time* checkbox in the *Current Info* tab lets the player release the lock and change the time freely, for example to get a sunset on any preset. It is on by default, so the original behaviour is unchanged. The setting is not saved and is back on after a restart.
@@ -40,7 +42,7 @@ Only the Lua controller is in this repository. The presets, HDR cubemaps and tex
 
 ### Checking that it works
 
-- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.3-port039`.
+- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.4-port039`.
 - The *Current Info* tab has the *Freeze time* checkbox.
 - The preset list is not empty. If it is, the log (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) will have `Version mismatch` or `Cubemaps are missing` lines with the `addon_ck_cktodbox` tag. That means the archive is not the original 0.5 release or its files are damaged.
 
@@ -86,6 +88,8 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 **Высотный туман.** Высота и плотность тумана из пресета применяются как есть. Сжатие тумана в тонкий слой у земли заставляло освещённый туман 0.39 светиться белым.
 
+**Яркость неба и блик солнца.** Пресеты делались под 0.38 с яркостью неба 280, а стоковые карты 0.39 используют 40. Яркость уменьшается в 40/280 раз, а блик линзы ставится с масштабом 1 вместо 5 у карты, поэтому при взгляде на солнце небо и машина больше не выгорают в белое. При выключении мода обе настройки возвращаются.
+
 **Цвет солнца.** 0.39 игнорирует градиенты `sunScale`. Разница в цвете между пресетом и обычным дневным светом передаётся через дополнительное поглощение озоном на пути солнечного луча.
 
 **Заморозка времени.** Каждый пресет привязан ко времени суток, под которое сделана его кубмапа. Флажок *Freeze time* на вкладке *Current Info* снимает привязку, и время можно менять свободно, например чтобы получить закат на любом пресете. По умолчанию флажок включён, поведение оригинала не меняется. Настройка не сохраняется и после перезапуска снова включена.
@@ -112,7 +116,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 ### Как проверить, что всё работает
 
-- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.3-port039`.
+- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.4-port039`.
 - На вкладке *Current Info* есть флажок *Freeze time*.
 - Список пресетов не пустой. Если пустой, в логе (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) будут строки `Version mismatch` или `Cubemaps are missing` с меткой `addon_ck_cktodbox`. Это значит, что архив не оригинальный 0.5 или файлы в нём повреждены.
 

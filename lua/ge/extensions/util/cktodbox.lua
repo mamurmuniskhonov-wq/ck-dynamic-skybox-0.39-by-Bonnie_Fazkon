@@ -64,7 +64,7 @@ local levelname =  nil
 --tool stuff
 local skyBoxes = "/art/cktodBox/"
 local tool_version = "0.5" -- preset format version, must match "version" in the .todbox.json files
-local small_version = ".3-port039"
+local small_version = ".4-port039"
 local appTitle = "CK Dynamic Skybox - ".. tool_version .. small_version .." - ".. beamng_arch
 
 local tod = nil
@@ -687,6 +687,11 @@ local function setAsphaltWet(isTrue)
   be:reloadCollision()
 end]]--
 
+--the 0.38 presets use skyBrightness 280 (200 for overcast), the stock 0.39 levels use 40 for a clear day.
+--At the preset value the forward scattering around the sun and the lens flare glowed white when facing the sun
+local skyBrightnessScale = 40 / 280
+local legacyFlareScale = 1
+
 local function setSunsky(data)
   if data.sunSize then
     sunsky.sunSize = data.sunSize
@@ -699,12 +704,15 @@ local function setSunsky(data)
     log('W', logTag, 'Missing exposure' )
   end
   if data.skyBrightness then
-    sunsky.skyBrightness = data.skyBrightness
+    sunsky.skyBrightness = newEnvApi and data.skyBrightness * skyBrightnessScale or data.skyBrightness
   else
     log('W', logTag, 'Missing skyBrightness' )
   end
   if data.brightness then
     sunsky.brightness = data.brightness
+  end
+  if newEnvApi then
+    sunsky.flareScale = data.flareScale or legacyFlareScale
   end
   if data.rayleighScattering then
     sunsky.rayleighScattering = data.rayleighScattering
@@ -1281,6 +1289,7 @@ local function readLevelData(levelname)
         loadedLevel["sunSize"] = sky.sunSize
         loadedLevel["exposure"] = sky.exposure
         loadedLevel["skyBrightness"] = sky.skyBrightness
+        loadedLevel["flareScale"] = sky.flareScale
         loadedLevel["brightness"] = sky.brightness
         loadedLevel["rayleighScattering"] = sky.rayleighScattering
         loadedLevel["texSize"] = sky.texSize
@@ -1720,6 +1729,7 @@ local function onEditorOpen()
         sky.sunSize = loadedLevel["sunSize"]
         sky.exposure = loadedLevel["exposure"]
         sky.skyBrightness = loadedLevel["skyBrightness"]
+        if loadedLevel["flareScale"] then sky.flareScale = loadedLevel["flareScale"] end
         sky.brightness = loadedLevel["brightness"]
         sky.rayleighScattering = loadedLevel["rayleighScattering"]
         sky.texSize = loadedLevel["texSize"]

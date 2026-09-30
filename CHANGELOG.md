@@ -1,5 +1,10 @@
 # Changelog - CK Dynamic Skybox
 
+## [0.5.4-port039] - 2026-10-01
+
+### Fixed
+- White glare when facing the sun, and a large white flare over the car. The preset sky brightness (280, made for 0.38) is scaled to the 0.39 range (x 40/280), and the lens flare scale is set to 1 (level default 5). The level flare scale is saved and restored when the mod is turned off.
+
 ## [0.5.3-port039] - 2026-10-01
 
 ### Fixed
