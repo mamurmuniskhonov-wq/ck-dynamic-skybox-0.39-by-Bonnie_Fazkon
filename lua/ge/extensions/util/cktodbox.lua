@@ -64,7 +64,7 @@ local levelname =  nil
 --tool stuff
 local skyBoxes = "/art/cktodBox/"
 local tool_version = "0.5" -- preset format version, must match "version" in the .todbox.json files
-local small_version = ".2-port039"
+local small_version = ".3-port039"
 local appTitle = "CK Dynamic Skybox - ".. tool_version .. small_version .." - ".. beamng_arch
 
 local tod = nil
@@ -150,20 +150,10 @@ end
 M.setFreezeTime = setFreezeTime
 M.getFreezeTime = function() return freezeTime end
 
---0.39 replaced the legacy height fog with a lit fog that is also applied to the sky, and its density falls off
---as exp(-z / fogAtmosphereHeight). With the preset values (made for 0.38, 2500-5500m) the skybox is fully fogged,
---so the fog layer is lowered to the range the stock 0.39 levels use and the density is kept at the player altitude
-local fogHeightLimit = 150
+--the preset fog height and density are applied as they are. Lowering the fog layer to 150 m and scaling the density
+--to the player altitude packed the lit 0.39 fog into a dense layer at eye level that glowed white in the sun
 local function convertFog(density, height)
-  if not newEnvApi or not height or height <= fogHeightLimit then return density, height end
-  local newHeight = fogHeightLimit
-  if density then
-    local veh = be:getPlayerVehicle(0)
-    local refZ = veh and veh:getPosition().z or (core_camera and core_camera.getPosition().z) or 0
-    refZ = math.max(0, math.min(refZ, 3 * newHeight))
-    density = density * math.exp(refZ / newHeight)
-  end
-  return density, newHeight
+  return density, height
 end
 
 --0.39 places the sun from latitude/longitude/date (core_celestial) and ignores TimeOfDay.azimuthOverride/axisTilt,

@@ -12,7 +12,7 @@ Only the Lua controller is in this repository. The presets, HDR cubemaps and tex
 
 **Exposure.** The mod does not force the exposure. It is left to the game's auto exposure and the player's own EV setting in the graphics options. Only a preset's own brightness value is kept as a small relative offset, so dimmer presets such as *Misty* stay darker.
 
-**Height fog.** Preset fog heights (2500-5500 m) produce a full whiteout under the new lit height fog. They are clamped to 150 m.
+**Height fog.** The preset fog height and density are applied as they are. Squeezing the fog into a thin layer near the ground made the lit 0.39 fog glow white.
 
 **Sun colour.** 0.39 ignores the `sunScale` gradients. The colour difference between a preset and plain daylight is reproduced through extra ozone absorption along the sun ray.
 
@@ -40,7 +40,7 @@ Only the Lua controller is in this repository. The presets, HDR cubemaps and tex
 
 ### Checking that it works
 
-- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.2-port039`.
+- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.3-port039`.
 - The *Current Info* tab has the *Freeze time* checkbox.
 - The preset list is not empty. If it is, the log (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) will have `Version mismatch` or `Cubemaps are missing` lines with the `addon_ck_cktodbox` tag. That means the archive is not the original 0.5 release or its files are damaged.
 
@@ -84,7 +84,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 **Экспозиция.** Мод не трогает экспозицию: ею управляют автоэкспозиция игры и настройка EV игрока в графических настройках. Сохраняется только собственная яркость пресета как небольшая относительная поправка, поэтому тусклые пресеты вроде *Misty* остаются темнее.
 
-**Высотный туман.** Высоты тумана из пресетов (2500–5500 м) при новой модели дают сплошную белую пелену. Они ограничены 150 м.
+**Высотный туман.** Высота и плотность тумана из пресета применяются как есть. Сжатие тумана в тонкий слой у земли заставляло освещённый туман 0.39 светиться белым.
 
 **Цвет солнца.** 0.39 игнорирует градиенты `sunScale`. Разница в цвете между пресетом и обычным дневным светом передаётся через дополнительное поглощение озоном на пути солнечного луча.
 
@@ -112,7 +112,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 ### Как проверить, что всё работает
 
-- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.2-port039`.
+- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.3-port039`.
 - На вкладке *Current Info* есть флажок *Freeze time*.
 - Список пресетов не пустой. Если пустой, в логе (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) будут строки `Version mismatch` или `Cubemaps are missing` с меткой `addon_ck_cktodbox`. Это значит, что архив не оригинальный 0.5 или файлы в нём повреждены.
 

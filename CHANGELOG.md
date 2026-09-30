@@ -1,5 +1,10 @@
 # Changelog - CK Dynamic Skybox
 
+## [0.5.3-port039] - 2026-10-01
+
+### Fixed
+- White glowing haze over the sky and trees. The fog height was clamped to 150 m and the density scaled by exp(altitude / 150), up to 5x denser than the stock level fog at eye level. The preset fog height and density are now applied unchanged.
+
 ## [0.5.2-port039] - 2026-10-01
 
 ### Changed
