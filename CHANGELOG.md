@@ -1,5 +1,13 @@
 # Changelog - CK Dynamic Skybox
 
+## [0.5.2-port039] - 2026-10-01
+
+### Changed
+- The mod no longer forces the exposure. The -1.2 EV offset and the low sun boost matched the author's 0.38 screenshots but blew the sky out to white in normal driving. Exposure is left to the game's auto exposure and the player's EV setting; only the relative offset from a preset's `brightness` is kept.
+
+### Removed
+- Low sun exposure boost and the `shirakaba` exclusion (no longer needed).
+
 ## [0.5.1-port039] - 2026-09-30
 
 ### Added

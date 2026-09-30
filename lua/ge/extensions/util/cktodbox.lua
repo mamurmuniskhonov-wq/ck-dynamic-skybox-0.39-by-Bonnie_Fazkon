@@ -64,7 +64,7 @@ local levelname =  nil
 --tool stuff
 local skyBoxes = "/art/cktodBox/"
 local tool_version = "0.5" -- preset format version, must match "version" in the .todbox.json files
-local small_version = ".1-port039"
+local small_version = ".2-port039"
 local appTitle = "CK Dynamic Skybox - ".. tool_version .. small_version .." - ".. beamng_arch
 
 local tod = nil
@@ -187,31 +187,14 @@ local function setLegacySun(azimuth)
   end
 end
 
---0.39 meters the exposure on the physically based sky and the presets render about 1.2 EV darker than in 0.38
---(measured against the 0.38 screenshots of the mod). While a preset is active the exposure compensation is offset
---on top of the user's own EV setting, the legacy sun brightness of the preset keeps its relative effect
-local legacyExposureEV = -1.2
+--the exposure is left to the player's EV setting and the 0.39 auto exposure; only the legacy sun brightness of the
+--preset keeps its relative effect (1.2 is the default preset brightness, a dimmer preset renders darker).
+--Forcing the presets brighter to match the 0.38 screenshots blew the sky out to white in normal driving
 local exposureOffset
--- 0.39 dims a low sun physically while the 0.38 presets kept their brightness; brighten the exposure while the sun is low
-local lowSunBoostEV = 0.75 -- calibrated at 15 degrees on West Coast against the 0.38 screenshot ("Shot 6")
-local lowSunBoostFrom, lowSunBoostFull = 30, 15 -- elevation: no boost at or above the first, full boost at or below the second
-local lowSunNightFrom, lowSunNightTo = 3, -2 -- elevation: boost fades out towards the night
-local lowSunExcluded = {shirakaba = true} -- stylised sunset presets keep their own look
-local lowSunEnabled = false -- set per preset in setLegacyExposure
-local function lowSunExposure()
-  if not lowSunEnabled then return 0 end
-  local elevation = sunsky and tonumber(sunsky.elevation)
-  if not elevation then return 0 end
-  local up = math.max(0, math.min(1, (lowSunBoostFrom - elevation) / (lowSunBoostFrom - lowSunBoostFull)))
-  local night = math.max(0, math.min(1, (elevation - lowSunNightTo) / (lowSunNightFrom - lowSunNightTo)))
-  up = up * up * (3 - 2 * up)
-  night = night * night * (3 - 2 * night)
-  return -lowSunBoostEV * up * night
-end
 local function updateExposure()
   local obj = scenetree.findObject("PostEffectLocalExposureObject")
   if not obj then return end
-  local target = (tonumber(settings.getValue("GraphicEVCompensation", 0)) or 0) + (exposureOffset and (exposureOffset + lowSunExposure()) or 0)
+  local target = (tonumber(settings.getValue("GraphicEVCompensation", 0)) or 0) + (exposureOffset or 0)
   if math.abs((tonumber(obj.exposureBiasEV) or 0) - target) > 1e-3 then
     obj.exposureBiasEV = target
   end
@@ -221,11 +204,9 @@ local function setLegacyExposure(preset)
   if not newEnvApi then return end
   if preset then
     local brightness = math.max(tonumber(preset.brightness) or 1.2, 0.1)
-    exposureOffset = legacyExposureEV + math.log(1.2 / brightness) / math.log(2)
-    lowSunEnabled = not lowSunExcluded[preset.name or ""]
+    exposureOffset = math.log(1.2 / brightness) / math.log(2)
   elseif exposureOffset then
     exposureOffset = nil
-    lowSunEnabled = false
   else
     return
   end
