@@ -12,7 +12,7 @@ Only the Lua controller is in this repository. The presets, HDR cubemaps and tex
 
 **Exposure.** The mod does not force the exposure. It is left to the game's auto exposure and the player's own EV setting in the graphics options. Only a preset's own brightness value is kept as a small relative offset, so dimmer presets such as *Misty* stay darker.
 
-**Height fog.** The preset fog height and density are applied as they are. Squeezing the fog into a thin layer near the ground made the lit 0.39 fog glow white.
+**Height fog.** The preset fog height and density are applied as they are. Squeezing the fog into a thin layer near the ground made the lit 0.39 fog glow white. After sunset the fog is gradually blended to the map's own fog, reaching it at nautical twilight, so the night sky is dark and shows the stars instead of a glowing haze.
 
 **Sky brightness and sun flare.** The presets were made for 0.38 with a sky brightness of 280, while stock 0.39 levels use 40. It is scaled down by 40/280, and the lens flare is set to scale 1 instead of the level's 5, so looking towards the sun no longer turns the sky and the car white. Both are restored when the mod is turned off.
 
@@ -42,7 +42,7 @@ Only the Lua controller is in this repository. The presets, HDR cubemaps and tex
 
 ### Checking that it works
 
-- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.4-port039`.
+- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.7-port039`.
 - The *Current Info* tab has the *Freeze time* checkbox.
 - The preset list is not empty. If it is, the log (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) will have `Version mismatch` or `Cubemaps are missing` lines with the `addon_ck_cktodbox` tag. That means the archive is not the original 0.5 release or its files are damaged.
 
@@ -65,6 +65,7 @@ The presets look darker on 0.39 than on the author's 0.38 screenshots. An earlie
 ## Known issues
 
 - With *Freeze time* off, the static cubemap clouds do not follow the sun.
+- With *Freeze time* off, the cubemap sky is switched off at sunset and the game's own night sky is shown, without the preset clouds.
 
 ## Credits
 
@@ -86,7 +87,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 **Экспозиция.** Мод не трогает экспозицию: ею управляют автоэкспозиция игры и настройка EV игрока в графических настройках. Сохраняется только собственная яркость пресета как небольшая относительная поправка, поэтому тусклые пресеты вроде *Misty* остаются темнее.
 
-**Высотный туман.** Высота и плотность тумана из пресета применяются как есть. Сжатие тумана в тонкий слой у земли заставляло освещённый туман 0.39 светиться белым.
+**Высотный туман.** Высота и плотность тумана из пресета применяются как есть. Сжатие тумана в тонкий слой у земли заставляло освещённый туман 0.39 светиться белым. После заката туман плавно переходит к туману самой карты и достигает его к навигационным сумеркам, поэтому ночное небо тёмное и со звёздами, а не затянуто светящейся дымкой.
 
 **Яркость неба и блик солнца.** Пресеты делались под 0.38 с яркостью неба 280, а стоковые карты 0.39 используют 40. Яркость уменьшается в 40/280 раз, а блик линзы ставится с масштабом 1 вместо 5 у карты, поэтому при взгляде на солнце небо и машина больше не выгорают в белое. При выключении мода обе настройки возвращаются.
 
@@ -116,7 +117,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 ### Как проверить, что всё работает
 
-- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.4-port039`.
+- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.7-port039`.
 - На вкладке *Current Info* есть флажок *Freeze time*.
 - Список пресетов не пустой. Если пустой, в логе (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) будут строки `Version mismatch` или `Cubemaps are missing` с меткой `addon_ck_cktodbox`. Это значит, что архив не оригинальный 0.5 или файлы в нём повреждены.
 
@@ -139,6 +140,7 @@ extensions.util_cktodbox.toggle()             -- показать или скр�
 ### Известные проблемы
 
 - При выключенной заморозке времени облака на статической кубмапе не следуют за солнцем.
+- При выключенной заморозке времени на закате кубмапа неба выключается и показывается ночное небо игры, без облаков пресета.
 
 ### Авторы
 

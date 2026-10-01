@@ -1,5 +1,26 @@
 # Changelog - CK Dynamic Skybox
 
+## [0.5.7-port039] - 2026-10-01
+
+### Fixed
+- Night sky glowing in a flat purple haze with no stars, and roads lit like dusk at midnight (2.8x the stock level without headlights). The preset fog (e.g. 3500 m high, density 0.0008) is optically thick up to the zenith and stays lit at night. Below the horizon the fog is now blended to the level's own fog, reaching it at -12° sun elevation (nautical twilight); density and height are blended logarithmically. In a probe on East Coast USA at midnight the level fog gave a black sky with stars (L 0.07 vs 45.6) and the stock road brightness. Daytime fog is unchanged.
+
+### Changed
+- The three copies of the fog code (preset, default weather, weather) are merged into one function.
+
+## [0.5.6-port039] - 2026-10-01
+
+### Fixed
+- With *Freeze time* off, the static daylight cubemap stayed visible all night and lit the scene (sky and ground as bright as day at midnight on Shirakaba and Dark Overcast). All bundled presets are static, and only dynamic presets hid the skybox below the horizon. Static presets now hide it too while the sun is below the horizon, leaving the game's night sky. With *Freeze time* on nothing changes.
+
+## [0.5.5-port039] - 2026-10-01
+
+### Removed
+- Leftover debug `print` of the material file path when generating reflection cubemaps.
+
+### Verified
+- None of the 10 bundled presets (`*.todbox.json`) sets `flareScale`, so the lens flare is capped at 1 on every preset.
+
 ## [0.5.4-port039] - 2026-10-01
 
 ### Fixed
