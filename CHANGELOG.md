@@ -1,5 +1,10 @@
 # Changelog - CK Dynamic Skybox
 
+## [0.5.6-port039] - 2026-10-01
+
+### Fixed
+- With *Freeze time* off, the static daylight cubemap stayed visible all night and lit the scene (sky and ground as bright as day at midnight on Shirakaba and Dark Overcast). All bundled presets are static, and only dynamic presets hid the skybox below the horizon. Static presets now hide it too while the sun is below the horizon, leaving the game's night sky. With *Freeze time* on nothing changes.
+
 ## [0.5.5-port039] - 2026-10-01
 
 ### Removed

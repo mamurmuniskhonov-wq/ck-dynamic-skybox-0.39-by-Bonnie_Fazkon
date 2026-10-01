@@ -64,7 +64,7 @@ local levelname =  nil
 --tool stuff
 local skyBoxes = "/art/cktodBox/"
 local tool_version = "0.5" -- preset format version, must match "version" in the .todbox.json files
-local small_version = ".5-port039"
+local small_version = ".6-port039"
 local appTitle = "CK Dynamic Skybox - ".. tool_version .. small_version .." - ".. beamng_arch
 
 local tod = nil
@@ -2284,7 +2284,9 @@ local function onPreRender()
         else
           notApplied = false
         end
-        todBox.hidden = false
+        --the static cubemap is a daylight sky; with the time released it would stay lit, and light the scene, all night
+        local t = tod.time % 1
+        todBox.hidden = not freezeTime and currentPreset.supportNight ~= true and t >= 0.25 and t <= 0.75
         todBox:postApply()
       else
         for k,v in pairs(startTime) do
