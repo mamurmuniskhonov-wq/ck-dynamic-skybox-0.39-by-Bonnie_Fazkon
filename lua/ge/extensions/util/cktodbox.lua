@@ -64,7 +64,7 @@ local levelname =  nil
 --tool stuff
 local skyBoxes = "/art/cktodBox/"
 local tool_version = "0.5" -- preset format version, must match "version" in the .todbox.json files
-local small_version = ".4-port039"
+local small_version = ".5-port039"
 local appTitle = "CK Dynamic Skybox - ".. tool_version .. small_version .." - ".. beamng_arch
 
 local tod = nil
@@ -1861,7 +1861,6 @@ local function generateGenericCubemap(job, startTime, currentPreset, globalRef, 
       applyTimeOfDay(tod)
       job.sleep(1)
       captureCameraCubemap(currentPreset.directory..'cubemaps/'..currentPreset.name..'_reflection/'..globalRef[k]..'_reflection/cubemap/reflection')
-      print(currentPreset.directory..'cubemaps/'..currentPreset.name..'_reflection/'..globalRef[k]..'_reflection/main.materials.json')
       local f = io.open(currentPreset.directory..'cubemaps/'..currentPreset.name..'_reflection/'..globalRef[k]..'_reflection/main.materials.json', "w")
       f:write('{', '\n')
       f:write('  "'..globalRef[k]..'_reflection" : {', '\n')

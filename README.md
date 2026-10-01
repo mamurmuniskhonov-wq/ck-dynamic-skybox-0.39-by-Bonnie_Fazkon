@@ -42,7 +42,7 @@ Only the Lua controller is in this repository. The presets, HDR cubemaps and tex
 
 ### Checking that it works
 
-- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.4-port039`.
+- The mod window (key `\`) title reads `CK Dynamic Skybox - 0.5.5-port039`.
 - The *Current Info* tab has the *Freeze time* checkbox.
 - The preset list is not empty. If it is, the log (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) will have `Version mismatch` or `Cubemaps are missing` lines with the `addon_ck_cktodbox` tag. That means the archive is not the original 0.5 release or its files are damaged.
 
@@ -116,7 +116,7 @@ See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 ### Как проверить, что всё работает
 
-- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.4-port039`.
+- В заголовке окна мода (клавиша `\`) написано `CK Dynamic Skybox - 0.5.5-port039`.
 - На вкладке *Current Info* есть флажок *Freeze time*.
 - Список пресетов не пустой. Если пустой, в логе (`%LocalAppData%\BeamNG\BeamNG.drive\current\beamng.log`) будут строки `Version mismatch` или `Cubemaps are missing` с меткой `addon_ck_cktodbox`. Это значит, что архив не оригинальный 0.5 или файлы в нём повреждены.
 

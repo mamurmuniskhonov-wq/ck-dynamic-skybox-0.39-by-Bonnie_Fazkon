@@ -1,5 +1,13 @@
 # Changelog - CK Dynamic Skybox
 
+## [0.5.5-port039] - 2026-10-01
+
+### Removed
+- Leftover debug `print` of the material file path when generating reflection cubemaps.
+
+### Verified
+- None of the 10 bundled presets (`*.todbox.json`) sets `flareScale`, so the lens flare is capped at 1 on every preset.
+
 ## [0.5.4-port039] - 2026-10-01
 
 ### Fixed
