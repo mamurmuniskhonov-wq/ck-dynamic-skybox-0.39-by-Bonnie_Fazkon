@@ -64,7 +64,7 @@ local levelname =  nil
 --tool stuff
 local skyBoxes = "/art/cktodBox/"
 local tool_version = "0.5" -- preset format version, must match "version" in the .todbox.json files
-local small_version = ".6-port039"
+local small_version = ".7-port039"
 local appTitle = "CK Dynamic Skybox - ".. tool_version .. small_version .." - ".. beamng_arch
 
 local tod = nil
@@ -151,9 +151,53 @@ M.setFreezeTime = setFreezeTime
 M.getFreezeTime = function() return freezeTime end
 
 --the preset fog height and density are applied as they are. Lowering the fog layer to 150 m and scaling the density
---to the player altitude packed the lit 0.39 fog into a dense layer at eye level that glowed white in the sun
-local function convertFog(density, height)
-  return density, height
+--to the player altitude packed the lit 0.39 fog into a dense layer at eye level that glowed white in the sun.
+--At night the preset fog (3500 m high, optically thick up to the zenith) glows over the whole sky and hides the stars,
+--so below the horizon it is blended to the level fog, reaching it at nightFogElevation
+local nightFogElevation = -12
+local dayFog, fogBlend
+
+local function applyFog(levelinf, data, missingLevel)
+  if not levelinf or not data then return end
+  local fog = dayFog or {
+    offset = tonumber(levelinf.fogDensityOffset),
+    density = tonumber(levelinf.fogDensity),
+    height = tonumber(levelinf.fogAtmosphereHeight)
+  }
+  if data.fogOffset then fog.offset = data.fogOffset else log(missingLevel, logTag, 'Missing fogOffset' ) end
+  if data.fogDensity then fog.density = data.fogDensity else log(missingLevel, logTag, 'Missing fogDensity' ) end
+  if data.atmoshpereHeight then fog.height = data.atmoshpereHeight else log(missingLevel, logTag, 'Missing atmoshpereHeight' ) end
+  fog.info = levelinf
+  levelinf.fogDensityOffset = fog.offset
+  levelinf.fogDensity = fog.density
+  levelinf.fogAtmosphereHeight = fog.height
+  levelinf:postApply()
+  dayFog, fogBlend = fog, nil
+end
+
+local function blendLog(a, b, f)
+  if a > 0 and b > 0 then return a * (b / a) ^ f end
+  return a + (b - a) * f
+end
+
+local function updateNightFog()
+  if not newEnvApi or not dayFog or not sunsky then return end
+  local elevation = tonumber(sunsky.elevation)
+  local night = {
+    offset = tonumber(loadedLevel["fogDensityOffset"]),
+    density = tonumber(loadedLevel["fogDensity"]),
+    height = tonumber(loadedLevel["fogAtmosphereHeight"])
+  }
+  if not elevation or not night.offset or not night.density or not night.height then return end
+  local x = math.max(0, math.min(1, elevation / nightFogElevation))
+  local f = x * x * (3 - 2 * x)
+  if fogBlend and (f == fogBlend or (f > 0 and f < 1 and math.abs(f - fogBlend) < 1e-3)) then return end
+  local day, levelinf = dayFog, dayFog.info
+  levelinf.fogDensityOffset = (day.offset or night.offset) + (night.offset - (day.offset or night.offset)) * f
+  levelinf.fogDensity = blendLog(day.density or night.density, night.density, f)
+  levelinf.fogAtmosphereHeight = blendLog(day.height or night.height, night.height, f)
+  levelinf:postApply()
+  fogBlend = f
 end
 
 --0.39 places the sun from latitude/longitude/date (core_celestial) and ignores TimeOfDay.azimuthOverride/axisTilt,
@@ -767,29 +811,7 @@ local function setDefaultWeather(levelinf)
   --setMaterialShiny(false)
   if levelinf then
     log('I', logTag, 'Adding theLevelInfo overrides' )
-    local changed = false
-    local fogDensity, fogHeight = convertFog(currentPreset.fogDensity, currentPreset.atmoshpereHeight)
-    if currentPreset.fogOffset then
-      levelinf.fogDensityOffset = currentPreset.fogOffset
-      changed = true
-    else
-      log('W', logTag, 'Missing fogOffset' )
-    end
-    if currentPreset.fogDensity then
-      levelinf.fogDensity = fogDensity
-      changed = true
-    else
-      log('W', logTag, 'Missing fogDensity' )
-    end
-    if currentPreset.atmoshpereHeight then
-      levelinf.fogAtmosphereHeight = fogHeight
-      changed = true
-    else
-      log('W', logTag, 'Missing atmoshpereHeight' )
-    end
-    if changed == true then
-      levelinf:postApply()
-    end
+    applyFog(levelinf, currentPreset, 'W')
   end
 end
 
@@ -810,29 +832,7 @@ local function setTargetWeather(target)
         setSunsky(weatherTable[target])
         if levelinf then
           log('I', logTag, 'Adding theLevelInfo overrides' )
-          local changed = false
-          local fogDensity, fogHeight = convertFog(weatherTable[target].fogDensity, weatherTable[target].atmoshpereHeight)
-          if weatherTable[target].fogOffset then
-            levelinf.fogDensityOffset = weatherTable[target].fogOffset
-            changed = true
-          else
-            log('I', logTag, 'Missing fogOffset' )
-          end
-          if weatherTable[target].fogDensity then
-            levelinf.fogDensity = fogDensity
-            changed = true
-          else
-            log('I', logTag, 'Missing fogDensity' )
-          end
-          if weatherTable[target].atmoshpereHeight then
-            levelinf.fogAtmosphereHeight = fogHeight
-            changed = true
-          else
-            log('I', logTag, 'Missing atmoshpereHeight' )
-          end
-          if changed == true then
-            levelinf:postApply()
-          end
+          applyFog(levelinf, weatherTable[target], 'I')
         end
         if weatherTable[target].rain and weatherTable[target].rain == true then
           if weatherTable[target].rainDatablock then
@@ -1150,29 +1150,7 @@ local function onAddComponentsToMission()
     end
     if levelinf then
       log('I', logTag, 'Adding theLevelInfo overrides' )
-      local changed = false
-      local fogDensity, fogHeight = convertFog(currentPreset.fogDensity, currentPreset.atmoshpereHeight)
-      if currentPreset.fogOffset then
-        levelinf.fogDensityOffset = currentPreset.fogOffset
-        changed = true
-      else
-        log('W', logTag, 'Missing fogOffset' )
-      end
-      if currentPreset.fogDensity then
-        levelinf.fogDensity = fogDensity
-        changed = true
-      else
-        log('W', logTag, 'Missing fogDensity' )
-      end
-      if currentPreset.atmoshpereHeight then
-        levelinf.fogAtmosphereHeight = fogHeight
-        changed = true
-      else
-        log('W', logTag, 'Missing atmoshpereHeight' )
-      end
-      if changed == true then
-        levelinf:postApply()
-      end
+      applyFog(levelinf, currentPreset, 'W')
     end
     local skydir = "sky_gradients/"
     if currentPreset.name and currentPreset.directory then
@@ -1698,6 +1676,7 @@ local function onEditorOpen()
   setLegacySun(nil)
   setLegacyExposure(nil)
   restoreSunTint()
+  dayFog, fogBlend = nil, nil
   if todBox then todBox.hidden = true end
   if rainSfx then rainSfx.volume = 0 end
   if rainVfx then rainVfx.numDrops = 0 end
@@ -2332,6 +2311,7 @@ local function onPreRender()
   if pauseExecution == false then
     --the game settings can reset the exposure compensation, and the sun tint depends on the sun elevation
     if exposureOffset then updateExposure() end
+    updateNightFog()
     if sunTintColor and sunsky then
       local elevation = tonumber(sunsky.elevation)
       if elevation and (not sunTintElevation or math.abs(elevation - sunTintElevation) > 0.5) then
@@ -2401,6 +2381,7 @@ local function onClientEndMission()
   setLegacySun(nil)
   setLegacyExposure(nil)
   restoreSunTint()
+  dayFog, fogBlend = nil, nil
   usesLua = 0
   pauseExecution = true
   loadedLevel = {}
